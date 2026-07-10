@@ -301,7 +301,27 @@ body {
 
 
 
+#resetAll {
 
+    position: absolute;
+
+    bottom: 140px;
+
+    left: 50%;
+
+    transform: translateX(-50%);
+
+    padding: 10px 28px;
+
+    font-size: 16px;
+
+    border-radius: 8px;
+
+    border: none;
+
+    cursor: pointer;
+
+}
 /* Save button */
 
 
@@ -446,7 +466,9 @@ body {
 
 
 
-
+<button id="resetAll">
+Reset Tuning
+</button>
 
 <button id="saveTuning">
 Save Tuning
@@ -754,7 +776,32 @@ document.addEventListener("keydown", e=>{
 
 const saveButton =
 document.getElementById("saveTuning");
+    
+const resetAllButton =
+document.getElementById("resetAll");
 
+    resetAllButton.onclick = ()=>{
+
+
+    for(let i = 1; i <= 9; i++){
+
+
+        pitchValues[i] = 0;
+
+
+        sliders[i-1].value = 0;
+
+
+    }
+
+
+    unsavedChanges = true;
+
+
+    saveButton.innerText = "Save Tuning";
+
+
+};
 
 const savePopup =
 document.getElementById("savePopup");
