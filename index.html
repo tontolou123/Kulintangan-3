@@ -6,6 +6,19 @@
 
 <style>
 
+    .deleteTuning {
+
+    float: right;
+
+    background: none;
+
+    border: none;
+
+    cursor: pointer;
+
+    font-size: 16px;
+
+}
 * {
     box-sizing: border-box;
 }
@@ -942,7 +955,39 @@ function updateSavedList(){
         item.className="savedItem";
 
 
-        item.innerText=name;
+       item.innerHTML = `
+
+<span>${name}</span>
+
+<button class="deleteTuning">
+🗑
+</button>
+
+`;
+        let deleteButton = item.querySelector(".deleteTuning");
+
+
+deleteButton.onclick = (e)=>{
+
+    e.stopPropagation();
+
+
+    let saved =
+    JSON.parse(localStorage.getItem("tunings")) || {};
+
+
+    delete saved[name];
+
+
+    localStorage.setItem(
+        "tunings",
+        JSON.stringify(saved)
+    );
+
+
+    updateSavedList();
+
+};
 
 
 
