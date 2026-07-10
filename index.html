@@ -1,0 +1,1142 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>Kulintangan</title>
+
+<style>
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background: black;
+    color: white;
+    height: 100vh;
+    overflow: hidden;
+    font-family: Arial, sans-serif;
+}
+
+
+/* Top left settings */
+
+#savedMenuButton {
+
+    position: absolute;
+
+    top: 35px;
+
+    left: 35px;
+
+    font-size: 30px;
+
+    cursor: pointer;
+
+    background: none;
+
+    border: none;
+
+    color: white;
+
+}
+
+
+/* Saved tuning popup */
+
+#savedPanel {
+
+    display: none;
+
+    position: absolute;
+
+    top: 80px;
+
+    left: 35px;
+
+    width: 220px;
+
+    background: #111;
+
+    border: 1px solid white;
+
+    border-radius: 12px;
+
+    padding: 15px;
+
+    z-index: 10;
+
+}
+
+
+#savedPanel h3 {
+
+    margin-top: 0;
+
+    text-align: center;
+
+}
+
+
+
+.savedItem {
+
+    background: white;
+
+    color: black;
+
+    padding: 8px;
+
+    margin-top: 8px;
+
+    border-radius: 6px;
+
+    cursor: pointer;
+
+}
+
+
+
+/* Instrument row */
+
+
+.container {
+
+    display: flex;
+
+    justify-content: center;
+
+    gap: 20px;
+
+    position: absolute;
+
+    top: 38%;
+
+    left: 50%;
+
+    transform: translate(-50%, -50%);
+
+}
+
+
+
+.instrument {
+
+    text-align: center;
+
+    position: relative;
+
+}
+
+
+
+.circle {
+
+    width: 55px;
+
+    height: 55px;
+
+    background: white;
+
+    color: black;
+
+    border-radius: 50%;
+
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+
+    font-size: 24px;
+
+    font-weight: bold;
+
+
+    cursor: pointer;
+
+    transition: transform 0.1s, box-shadow 0.1s;
+
+}
+
+
+
+.circle.hit {
+
+    transform: scale(0.85);
+
+    box-shadow: 0 0 25px white;
+
+}
+
+
+
+
+.cog {
+
+    margin-top: 12px;
+
+    background: none;
+
+    border: none;
+
+    color: white;
+
+    font-size: 22px;
+
+    cursor: pointer;
+
+}
+
+
+
+
+
+.pitchBox {
+
+
+    display: none;
+
+
+    position: absolute;
+
+
+    top: 95px;
+
+
+    left: 50%;
+
+
+    transform: translateX(-50%);
+
+
+    background: #111;
+
+
+    border-radius: 10px;
+
+
+    padding: 10px;
+
+
+    height: 220px;
+
+
+    z-index: 5;
+
+}
+
+
+
+.slider {
+
+
+    appearance: slider-vertical;
+
+
+    writing-mode: bt-lr;
+
+
+    height: 150px;
+
+
+}
+
+
+
+.midline {
+
+
+    position: absolute;
+
+
+    width: 45px;
+
+
+    height: 2px;
+
+
+    background: white;
+
+
+    top: 85px;
+
+
+    left: 50%;
+
+
+    transform: translateX(-50%);
+
+
+}
+
+
+
+.resetPitch {
+
+
+    margin-top: 8px;
+
+
+    background: white;
+
+
+    color: black;
+
+
+    border: none;
+
+
+    border-radius: 5px;
+
+
+    cursor: pointer;
+
+
+}
+
+
+
+
+
+/* Save button */
+
+
+#saveTuning {
+
+
+    position: absolute;
+
+
+    bottom: 80px;
+
+
+    left: 50%;
+
+
+    transform: translateX(-50%);
+
+
+    padding: 12px 30px;
+
+
+    font-size: 16px;
+
+
+    border-radius: 8px;
+
+
+    border: none;
+
+
+    cursor: pointer;
+
+
+}
+
+
+
+
+
+/* Save popup */
+
+
+#savePopup {
+
+
+    display: none;
+
+
+    position: absolute;
+
+
+    top: 50%;
+
+
+    left: 50%;
+
+
+    transform: translate(-50%, -50%);
+
+
+    background: #111;
+
+
+    border: 1px solid white;
+
+
+    padding: 25px;
+
+
+    border-radius: 12px;
+
+
+    text-align: center;
+
+
+    z-index: 20;
+
+
+}
+
+
+
+#savePopup input {
+
+
+    width: 200px;
+
+
+    padding: 8px;
+
+
+    margin: 15px;
+
+
+}
+
+
+
+.popupButton {
+
+
+    padding: 8px 18px;
+
+
+    margin: 5px;
+
+
+    cursor: pointer;
+
+
+}
+
+
+
+</style>
+
+
+</head>
+
+
+
+<body>
+
+
+
+<button id="savedMenuButton">⚙</button>
+
+
+<div id="savedPanel">
+
+<h3>Saved Tunings</h3>
+
+<div id="savedList"></div>
+
+</div>
+
+
+
+
+
+<div class="container" id="container"></div>
+
+
+
+
+
+<button id="saveTuning">
+Save Tuning
+</button>
+
+
+
+
+
+<div id="savePopup">
+
+
+<h3>Name this tuning</h3>
+
+
+<input 
+id="tuningName"
+maxlength="20"
+placeholder="Maximum 20 characters">
+
+
+<br>
+
+
+<button class="popupButton" id="cancelSave">
+Cancel
+</button>
+
+
+<button class="popupButton" id="confirmSave">
+Confirm
+</button>
+
+
+</div>
+<script>
+
+
+const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+
+
+let sounds = {};
+
+let pitchValues = {};
+
+let sliders = [];
+
+let instruments = [];
+
+let unsavedChanges = false;
+
+
+
+
+// Create 9 kulintangan instruments
+
+const container = document.getElementById("container");
+
+
+for(let i = 1; i <= 9; i++){
+
+
+    let div = document.createElement("div");
+
+    div.className = "instrument";
+
+
+    div.innerHTML = `
+
+    <div class="circle">${i}</div>
+
+    <button class="cog">⚙</button>
+
+
+    <div class="pitchBox">
+
+
+        <div class="midline"></div>
+
+
+        <input 
+        class="slider"
+        type="range"
+        min="-6"
+        max="6"
+        step="0.01"
+        value="0">
+
+
+        <br>
+
+
+        <button class="resetPitch">
+        Reset
+        </button>
+
+
+    </div>
+
+
+    `;
+
+
+    container.appendChild(div);
+
+
+    pitchValues[i] = 0;
+
+
+    instruments.push(div);
+
+
+}
+
+
+
+
+// Load wav files
+
+async function loadSounds(){
+
+
+    for(let i = 1; i <= 9; i++){
+
+
+        let response = await fetch(i + ".wav");
+
+
+        let data = await response.arrayBuffer();
+
+
+        sounds[i] = await audioContext.decodeAudioData(data);
+
+
+    }
+
+
+}
+
+
+loadSounds();
+
+
+
+
+
+
+// Play sound
+
+function playSound(number){
+
+
+    if(!sounds[number]) return;
+
+
+
+    if(audioContext.state === "suspended"){
+
+        audioContext.resume();
+
+    }
+
+
+
+
+    let source = audioContext.createBufferSource();
+
+
+    source.buffer = sounds[number];
+
+
+
+    source.playbackRate.value =
+    Math.pow(2, pitchValues[number] / 12);
+
+
+
+    source.connect(audioContext.destination);
+
+
+    source.start(0);
+
+
+
+
+    // Hit animation
+
+    let circle = instruments[number-1]
+    .querySelector(".circle");
+
+
+    circle.classList.remove("hit");
+
+
+    void circle.offsetWidth;
+
+
+    circle.classList.add("hit");
+
+
+
+    setTimeout(()=>{
+
+        circle.classList.remove("hit");
+
+    },120);
+
+
+
+}
+
+
+
+
+
+
+// Connect controls
+
+instruments.forEach((item,index)=>{
+
+
+    let number = index + 1;
+
+
+    let circle = item.querySelector(".circle");
+
+    let cog = item.querySelector(".cog");
+
+    let box = item.querySelector(".pitchBox");
+
+    let slider = item.querySelector(".slider");
+
+    let reset = item.querySelector(".resetPitch");
+
+
+
+    sliders.push(slider);
+
+
+
+
+
+    circle.onclick = ()=>{
+
+        playSound(number);
+
+    };
+
+
+
+
+
+    slider.oninput = ()=>{
+
+
+        pitchValues[number] = Number(slider.value);
+
+
+        unsavedChanges = true;
+
+
+        document.getElementById("saveTuning").innerText =
+        "Save Tuning";
+
+
+    };
+
+
+
+
+
+    reset.onclick = ()=>{
+
+
+        slider.value = 0;
+
+
+        pitchValues[number] = 0;
+
+
+        unsavedChanges = true;
+
+
+        document.getElementById("saveTuning").innerText =
+        "Save Tuning";
+
+
+    };
+
+
+
+
+
+    cog.onclick = (e)=>{
+
+
+        e.stopPropagation();
+
+
+
+        document.querySelectorAll(".pitchBox")
+        .forEach(other=>{
+
+
+            if(other !== box){
+
+                other.style.display="none";
+
+            }
+
+
+        });
+
+
+
+        box.style.display =
+        box.style.display === "block"
+        ? "none"
+        : "block";
+
+
+
+    };
+
+
+
+    box.onclick = e=>{
+
+        e.stopPropagation();
+
+    };
+
+
+
+});
+
+
+
+
+
+
+// Keyboard 1-9
+
+document.addEventListener("keydown", e=>{
+
+
+    if(e.key >= "1" && e.key <= "9"){
+
+
+        playSound(Number(e.key));
+
+
+    }
+
+
+});
+
+
+
+
+
+// Close menus
+
+document.addEventListener("click", ()=>{
+
+
+    document.querySelectorAll(".pitchBox")
+    .forEach(box=>{
+
+
+        box.style.display="none";
+
+
+    });
+
+
+
+});
+
+
+
+</script></body>
+</html><script>
+
+
+const saveButton = document.getElementById("saveTuning");
+
+const savePopup = document.getElementById("savePopup");
+
+const tuningName = document.getElementById("tuningName");
+
+const confirmSave = document.getElementById("confirmSave");
+
+const cancelSave = document.getElementById("cancelSave");
+
+const savedMenuButton = document.getElementById("savedMenuButton");
+
+const savedPanel = document.getElementById("savedPanel");
+
+const savedList = document.getElementById("savedList");
+
+
+
+
+// Open save popup
+
+saveButton.onclick = ()=>{
+
+
+    savePopup.style.display = "block";
+
+
+    tuningName.value = "";
+
+
+};
+
+
+
+
+
+// Cancel save
+
+cancelSave.onclick = ()=>{
+
+
+    savePopup.style.display = "none";
+
+
+};
+
+
+
+
+
+// Get saved tunings
+
+function getSavedTunings(){
+
+
+    return JSON.parse(
+
+        localStorage.getItem("kulintanganTunings")
+
+    ) || {};
+
+
+}
+
+
+
+
+
+
+
+// Save tuning
+
+confirmSave.onclick = ()=>{
+
+
+    let name = tuningName.value.trim();
+
+
+
+    if(name === ""){
+
+        return;
+
+    }
+
+
+
+
+    let saved = getSavedTunings();
+
+
+
+    saved[name] = {...pitchValues};
+
+
+
+    localStorage.setItem(
+
+        "kulintanganTunings",
+
+        JSON.stringify(saved)
+
+    );
+
+
+
+    savePopup.style.display = "none";
+
+
+
+    unsavedChanges = false;
+
+
+
+    saveButton.innerText = "Tuning Saved";
+
+
+
+    updateSavedList();
+
+
+
+};
+
+
+
+
+
+
+// Load saved list
+
+function updateSavedList(){
+
+
+    savedList.innerHTML = "";
+
+
+
+    let saved = getSavedTunings();
+
+
+
+    Object.keys(saved).forEach(name=>{
+
+
+
+        let item = document.createElement("div");
+
+
+        item.className = "savedItem";
+
+
+        item.innerHTML = `
+
+        ${name}
+
+        `;
+
+
+
+
+        item.onclick = ()=>{
+
+
+            loadTuning(name);
+
+
+        };
+
+
+
+        savedList.appendChild(item);
+
+
+
+    });
+
+
+}
+
+
+
+
+
+
+
+// Load tuning
+
+function loadTuning(name){
+
+
+
+    let saved = getSavedTunings();
+
+
+
+    if(!saved[name]) return;
+
+
+
+    for(let i = 1; i <= 9; i++){
+
+
+        pitchValues[i] = saved[name][i];
+
+
+
+        sliders[i-1].value = saved[name][i];
+
+
+    }
+
+
+
+
+    unsavedChanges = false;
+
+
+
+    saveButton.innerText = "Tuning Saved";
+
+
+
+    savedPanel.style.display = "none";
+
+
+
+}
+
+
+
+
+
+
+// Open saved menu
+
+savedMenuButton.onclick = (e)=>{
+
+
+    e.stopPropagation();
+
+
+
+    updateSavedList();
+
+
+
+    savedPanel.style.display =
+
+    savedPanel.style.display === "block"
+
+    ? "none"
+
+    : "block";
+
+
+
+};
+
+
+
+
+
+
+// Prevent popup closing
+
+savedPanel.onclick = e=>{
+
+
+    e.stopPropagation();
+
+
+};
+
+
+
+
+
+
+// Close popups when clicking outside
+
+document.addEventListener("click", ()=>{
+
+
+    savedPanel.style.display = "none";
+
+
+    savePopup.style.display = "none";
+
+
+});
+
+
+
+
+
+// Initial load
+
+updateSavedList();
+
+
+
+</script>
+
+
+
+</body>
+</html>
