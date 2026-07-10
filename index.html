@@ -195,6 +195,8 @@ body {
 
 .cog {
 
+.cog {
+
     margin-top: 12px;
 
     background: none;
@@ -206,6 +208,17 @@ body {
     font-size: 22px;
 
     cursor: pointer;
+
+    transition: transform 0.3s ease;
+
+}
+
+
+.cog.active {
+
+    transform: rotate(90deg);
+
+}
 
 }
 
@@ -739,24 +752,48 @@ instruments.forEach((item,index)=>{
 
 
 
-    cog.onclick = (e)=>{
+  cog.onclick = (e)=>{
 
-        e.stopPropagation();
+    e.stopPropagation();
 
 
-        document.querySelectorAll(".pitchBox")
-        .forEach(x=>{
+    document.querySelectorAll(".pitchBox")
+    .forEach(x=>{
 
-            if(x !== box)
+        if(x !== box)
             x.style.display="none";
 
-        });
+    });
 
 
-        box.style.display =
-        box.style.display === "block"
-        ? "none"
-        : "block";
+    document.querySelectorAll(".cog")
+    .forEach(x=>{
+
+        if(x !== cog)
+            x.classList.remove("active");
+
+    });
+
+
+
+    if(box.style.display === "block"){
+
+        box.style.display = "none";
+
+        cog.classList.remove("active");
+
+    }
+
+    else {
+
+        box.style.display = "block";
+
+        cog.classList.add("active");
+
+    }
+
+
+};
 
     };
 
