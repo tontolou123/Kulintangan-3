@@ -988,6 +988,29 @@ savedButton.onclick = e=>{
 
 };
 
+    e.stopPropagation();
+
+    updateSavedList();
+
+
+    if(savedPanel.style.display === "block"){
+
+        savedPanel.style.display = "none";
+
+        savedButton.classList.remove("active");
+
+    }
+
+    else {
+
+        savedPanel.style.display = "block";
+
+        savedButton.classList.add("active");
+
+    }
+
+
+
 
 
 
