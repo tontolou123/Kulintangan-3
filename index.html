@@ -70,7 +70,13 @@ body {
 
 #savedPanel {
 
-    display: none;
+opacity: 0;
+
+visibility: hidden;
+
+transform: translateY(-15px);
+
+transition: opacity 0.25s ease, transform 0.25s ease;
 
     position: absolute;
 
@@ -89,6 +95,15 @@ body {
     padding: 15px;
 
     z-index: 10;
+
+}
+    #savedPanel.show {
+
+    opacity: 1;
+
+    visibility: visible;
+
+    transform: translateY(0);
 
 }
 
@@ -1027,9 +1042,9 @@ savedButton.onclick = e=>{
     updateSavedList();
 
 
-    if(savedPanel.style.display === "block"){
+    if(savedPanel.classList.contains("show")){
 
-        savedPanel.style.display = "none";
+        savedPanel.classList.remove("show");
 
         savedButton.classList.remove("active");
 
@@ -1037,34 +1052,13 @@ savedButton.onclick = e=>{
 
     else {
 
-        savedPanel.style.display = "block";
+        savedPanel.classList.add("show");
 
         savedButton.classList.add("active");
 
     }
 
 };
-
-    e.stopPropagation();
-
-    updateSavedList();
-
-
-    if(savedPanel.style.display === "block"){
-
-        savedPanel.style.display = "none";
-
-        savedButton.classList.remove("active");
-
-    }
-
-    else {
-
-        savedPanel.style.display = "block";
-
-        savedButton.classList.add("active");
-
-    }
 
 
 
