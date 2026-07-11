@@ -681,8 +681,26 @@ function playSound(number){
 
     source.connect(audioContext.destination);
 
-
+if (window.activeSources && window.activeSources.length >= 9) {
+    return;
+}
     source.start();
+
+    if (!window.activeSources) {
+    window.activeSources = [];
+}
+
+window.activeSources.push(source);
+
+source.onended = () => {
+
+    const i = window.activeSources.indexOf(source);
+
+    if (i !== -1) {
+        window.activeSources.splice(i, 1);
+    }
+
+};
 
 
 
