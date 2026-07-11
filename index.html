@@ -851,18 +851,37 @@ instruments.forEach((item,index)=>{
 
 // Keyboard
 
-document.addEventListener("keydown", e=>{
+let keysDown = {};
+
+document.addEventListener("keydown", e => {
+
+    if(e.repeat) return;
 
 
     if(e.key >= "1" && e.key <= "9"){
 
-        playSound(Number(e.key));
+        if(!keysDown[e.key]){
+
+            keysDown[e.key] = true;
+
+            playSound(Number(e.key));
+
+        }
 
     }
 
-
 });
 
+
+document.addEventListener("keyup", e => {
+
+    if(e.key >= "1" && e.key <= "9"){
+
+        keysDown[e.key] = false;
+
+    }
+
+});
 
 
 
