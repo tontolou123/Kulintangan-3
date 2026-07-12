@@ -132,11 +132,12 @@ transition: opacity 0.25s ease, transform 0.25s ease;
 
     cursor: pointer;
 
-    .savedItem {
     display: flex;
+
     justify-content: space-between;
+
     align-items: center;
-}
+
 }
 
 
@@ -1141,7 +1142,9 @@ deleteButton.onclick = (e)=>{
             saveButton.innerText="Tuning Saved";
 
 
-            savedPanel.style.display="none";
+            savedPanel.classList.remove("show");
+
+savedButton.classList.remove("active");
 
 
         };
@@ -1167,7 +1170,9 @@ document.addEventListener("click",()=>{
     .forEach(x=>x.style.display="none");
 
 
-    savedPanel.style.display="none";
+    savedPanel.classList.remove("show");
+
+    savedButton.classList.remove("active");
 
 
 });
